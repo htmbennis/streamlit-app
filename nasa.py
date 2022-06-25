@@ -4,12 +4,16 @@ import numpy as np
 import altair as alt
 import matplotlib.pyplot as plt
 
-
 st.set_page_config(
     page_title="Gale Crater", page_icon="📊", initial_sidebar_state="expanded"
 )
 
 st.title('📊 Gale Crater')
+
+st.image('./curiosity_image.PNG'
+  #, caption='Curiosity in the Gale Crater'
+  )
+
 st.header('Geochemistry analysis')
 #st.subheader('This is a subheader')
 
