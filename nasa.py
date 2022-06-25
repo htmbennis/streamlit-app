@@ -22,7 +22,8 @@ data = pd.read_csv(DATA_FILE)
 
 if st.checkbox('Show raw data'):
     st.subheader('Raw data')
-    st.write(data)
+    st.dataframe(data)
+    #st.write(data)  #This is an other way to display table
 
 LIST_OF_ATOMS = st.multiselect(
     "Choose atoms", list(['SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O']), ['SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O']
@@ -30,12 +31,14 @@ LIST_OF_ATOMS = st.multiselect(
 
 IS_STAKED = st.selectbox(
      'How would you like to display graphs?',
-     ('Stacked', 'Unstacked'))
+     ('Stacked', 'Unstacked'),
+     help="Stacked or Unstacked.",)
 #st.write('You selected:', IS_STAKED)
 
 RANK_MIN_MAX = st.slider(
      'Select a range of data points',
-     1, 1085, (1, 1085))
+     1, 1085, (1, 1085),
+     help="Adjust range so you can zoom in and zoom out in the graph.",)
 #st.write('Values:', RANK_MIN_MAX[0])
 
 if not LIST_OF_ATOMS:
@@ -66,3 +69,15 @@ if LIST_OF_ATOMS:
   st.pyplot(fig)
 
 st.header('Mineralogy analysis')
+
+
+
+
+
+
+
+
+st.header('Morphology analysis')
+
+st.header('Run analysis with your own data')
+uploaded_file = st.file_uploader("Upload CSV", type=".csv")
