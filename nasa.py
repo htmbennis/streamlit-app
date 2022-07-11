@@ -39,6 +39,7 @@ DATA_FILE_2 = ('nasa_input_2_2.csv')
 data = pd.read_csv(DATA_FILE_1, sep=";")
 data_2 = pd.read_csv(DATA_FILE_2, sep=";")
 
+
 #########################################################
 #          FROM GEOCHEMISTRY TO MINERALOGY              #
 #########################################################
@@ -99,7 +100,7 @@ if LIST_OF_MINERALS:
   SOLS_MAX = SOLS_MIN_MAX[1]
 
   fig, ax = plt.subplots()
-  ax.stackplot(data['Sols'],data[LIST_OF_MINERALS].T, alpha = 0.4)
+  ax.stackplot(data['Sols'],data[LIST_OF_MINERALS].T, alpha = 0.6)
 
   ax.legend(LIST_OF_MINERALS,
       loc=5, 
@@ -178,7 +179,11 @@ if sum_of_inputs <= 100:
     fig, ax = plt.subplots()
     ax.pie(np.append(input_vector,OTHERS_INPUT), labels = ['SiO2', 'FeO', 'Al2O3', 'SO3','Others'] ,
           autopct=lambda p: '{:.0f}%'.format(p),
-          startangle = 90)
+          startangle = 90,
+          colors=['#a5c8e1','#ffcb9e','#aad9aa','#eea8a9','#a5a5a5'])
+    centre_circle = plt.Circle((0,0),0.70,fc='white')
+    fig = plt.gcf()
+    fig.gca().add_artist(centre_circle)
     st.pyplot(fig) 
   with col11 :
     st.markdown("**Output : Estimated Mineralogy**") 
@@ -186,6 +191,9 @@ if sum_of_inputs <= 100:
     ax.pie(Y, labels = ['Amorphous','Pyroxene','Sulfate','Magnetite','Hematite','Feldspar','Plagioclase','Clay'] ,
           autopct=lambda p: '{:.0f}%'.format(p),
           startangle = 90)
+    centre_circle = plt.Circle((0,0),0.70,fc='white')
+    fig = plt.gcf()
+    fig.gca().add_artist(centre_circle)    
     st.pyplot(fig)
 
 
@@ -213,7 +221,11 @@ with col15 :
     fig, ax = plt.subplots()
     plt.pie(record_X, labels = ['SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O','Others'] ,
         autopct=lambda p: '{:.0f}%'.format(p),
-        startangle = 90)
+        startangle = 90,
+        colors=['#a5c8e1','#ffcb9e','#aad9aa','#eea8a9','#d4c2e4','#d0bbb7','#f3c8e6','#a5a5a5'])
+    centre_circle = plt.Circle((0,0),0.70,fc='white')
+    fig = plt.gcf()
+    fig.gca().add_artist(centre_circle)    
     st.pyplot(fig)
 with col16 :
     st.markdown("**Measured Mineralogy**")
@@ -221,16 +233,22 @@ with col16 :
     plt.pie(record_Y_measure, labels = ['Amorphous','Pyroxene','Sulfate','Magnetite','Hematite','Feldspar','Plagioclase','Clay'] ,
         autopct=lambda p: '{:.0f}%'.format(p),
         startangle = 90)
+    centre_circle = plt.Circle((0,0),0.70,fc='white')
+    fig = plt.gcf()
+    fig.gca().add_artist(centre_circle)    
     st.pyplot(fig)
 with col17 :
     fig, ax = plt.subplots()
-    st.markdown("**Estimated Mineralogy**")   
+    st.markdown("**Estimated Mineralogy***")   
     plt.pie(record_Y_estim, labels = ['Amorphous','Pyroxene','Sulfate','Magnetite','Hematite','Feldspar','Plagioclase','Clay'] ,
         autopct=lambda p: '{:.0f}%'.format(p),
         startangle = 90) 
+    centre_circle = plt.Circle((0,0),0.70,fc='white')
+    fig = plt.gcf()
+    fig.gca().add_artist(centre_circle)    
     st.pyplot(fig)
 
-st.write ('Note: Here, the estimation function of mineralogy does not include the measurements noise reduction')
+st.write ('*Note: Here, the estimation function of mineralogy does not include the measurements noise reduction')
 
 
 #########################################################
