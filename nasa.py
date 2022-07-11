@@ -58,12 +58,12 @@ SOLS_MIN_MAX = st.slider(
 
 #Geochemistry analysis
 LIST_OF_ATOMS = st.multiselect(
-    "Choose geochimicals:", list(['SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O']), ['SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O']
+    "Choose chimical elements:", list(['SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O']), ['SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O']
 )
 
 
 if not LIST_OF_ATOMS:
-    st.error("Please select at least one atom.")
+    st.error("Please select at least one chemical element.")
 
 if LIST_OF_ATOMS:
   SOLS_MIN = SOLS_MIN_MAX[0]
@@ -81,7 +81,7 @@ if LIST_OF_ATOMS:
       )
   ax.set_xlim(SOLS_MIN,SOLS_MAX)
   ax.set_xlabel('Sols')
-  ax.set_ylabel('Percentage of Atomic composition (%)')
+  ax.set_ylabel('Elemental weight (%)')
   ax.grid(axis='y')
   st.pyplot(fig)
 
@@ -93,7 +93,7 @@ LIST_OF_MINERALS = st.multiselect(
 )
 
 if not LIST_OF_MINERALS:
-    st.error("Please select at least one atom.")
+    st.error("Please select at least one mineral.")
 
 if LIST_OF_MINERALS:
   SOLS_MIN = SOLS_MIN_MAX[0]
@@ -111,7 +111,7 @@ if LIST_OF_MINERALS:
       )
   ax.set_xlim(SOLS_MIN,SOLS_MAX)
   ax.set_xlabel('Sols')
-  ax.set_ylabel('Percentage of Mineral composition (%)')
+  ax.set_ylabel('Mineral composition (wt%)')
   ax.grid(axis='y')
   st.pyplot(fig)
 
