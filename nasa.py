@@ -153,23 +153,23 @@ st.subheader('Run analysis with your own data')
 with st.form(key="mineralogy_estim_form"):
   st.write('Insert concentration of each chemical:')
   #'SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O'
-  col4, col5, col6 = st.columns(3)
+  col4, col5, col6, col7 = st.columns(4)
   with col4: SIO2_INPUT = st.number_input('SiO2 (%)',min_value=0, max_value=100,value=44, step=1)
   with col5: FEO_INPUT = st.number_input('FeO (%)',min_value=0, max_value=100,value=22, step=1)
   with col6: AL2O3_INPUT = st.number_input('Al2O3 (%)',min_value=0, max_value=100,value=8, step=1)
-  col7, col8, col9 = st.columns(3)
-  with col7: SO3_INPUT = st.number_input('SO3 (%)',min_value=0, max_value=100,value=3, step=1)
-  with col8: OTHERS_INPUT = st.number_input('Others (%)',min_value=0, max_value=100,value=23, step=1)
-  sum_of_inputs = SIO2_INPUT + FEO_INPUT + AL2O3_INPUT + SO3_INPUT + OTHERS_INPUT
-  
+  with col7: SO3_INPUT = st.number_input('SO3 (%)',min_value=0, max_value=100,value=3, step=1)  
+  #col7, col8, col9 = st.columns(3)
+  #with col8: OTHERS_INPUT = st.number_input('Others (%)',min_value=0, max_value=100,value=23, step=1)
+  sum_of_inputs = SIO2_INPUT + FEO_INPUT + AL2O3_INPUT + SO3_INPUT #+ OTHERS_INPUT
+  OTHERS_INPUT = 100 - sum_of_inputs 
   submit_button = st.form_submit_button(label="Estimate mineralogy")
 input_vector = [SIO2_INPUT,FEO_INPUT,AL2O3_INPUT,SO3_INPUT]
 
-if sum_of_inputs != 100:
+if sum_of_inputs > 100:
     st.error("Total of inputs should be equal to 100%. Please change inputs.")
     st.write("Total of inputs is equal to",sum_of_inputs)
 
-if sum_of_inputs == 100:
+if sum_of_inputs <= 100:
   Y = estim_mineral_func(input_vector)
   
   col10, col11= st.columns(2)
@@ -202,7 +202,8 @@ SPECIFIC_MEASUREMENT = st.selectbox(
 'GE','GE2','HU','EB','GG','MA','MA3','GR','NT','BD','PT','MG','ZS']),1)
 
 record = np.array(data_2[data_2.Abreviation==SPECIFIC_MEASUREMENT]).flatten()
-record_X = np.array([record[3],record[4],record[5],record[6],record[7],record[8],record[9]])
+sum_of_x=record[3]+record[4]+record[5]+record[6]+record[7]+record[8]+record[9]
+record_X = np.array([record[3],record[4],record[5],record[6],record[7],record[8],record[9],100-sum_of_x])
 record_Y_measure = np.array([record[10],record[11],record[12],record[13],record[14],record[15],record[16],record[17]])
 record_Y_estim = estim_mineral_func (record_X[:4])
 
@@ -210,7 +211,7 @@ col15, col16, col17 = st.columns(3)
 with col15 :
     st.markdown("**Measured Geochemistry**")
     fig, ax = plt.subplots()
-    plt.pie(record_X, labels = ['SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O'] ,
+    plt.pie(record_X, labels = ['SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O','Others'] ,
         autopct=lambda p: '{:.0f}%'.format(p),
         startangle = 90)
     st.pyplot(fig)
