@@ -19,27 +19,18 @@ st.image('./curiosity_image.PNG')
 
 def estim_mineral_func (X) :
   A = np.array([
-    [-2.11 , 0.44, -1.05 , 1.44, 0.077, -0.05476 , -0.1407],
-    [-1.96 , 0.8507, -2.033,  2.141, 0.0406 ,-0.228 , 2.7615],
-    [1.355 ,0.737, 0.3744 ,2.6085, 0.0663 , 1.291, 0.0485],
-    [-2.851  ,1.2109, -3.2887, 2.1291, 0.006971, -0.90095 , 1.5591]
-  ])
-  B = np.array([150.04, -46.20 , 105.25 ,-142.33 , -4.43,  24.93 ,-47.16])
-  #X = np.array([44,22,8,3,6,8.6])
-  #X = input_vector
+                [0.985420687,-3.066379724,0.424739715,-1.051622287,1.022481735,0.467960914,-0.410071317,-0.654388826],
+                [-0.079052703,-3.807826331,0.849542732,-2.033170572,1.619821563,0.841339507,-0.971899764,1.732725411],
+                [-0.36141167,-2.523011493,0.451884864,0.374461398,1.715807751,0.073766502,2.191364637,-0.407165512],
+                [1.790211749,-5.260412458,1.090036377,-3.288686911,1.27437956,0.053005324,-0.250028796,2.243423759]
+                ])
+  B = np.array([-13.16627197,282.1501528,-42.56947313,105.2539243,-98.68748535,-37.29211563,40.53349503,0.054267971])
+  #X = np.array([44,22,8,3])
   AX = np.matmul(np.transpose(A),X)
   Y = np.add(np.matmul(np.transpose(A),X),B)
   Y = np.maximum(Y, 0)
-  Y = np.append(Y, 100 - np.sum(Y))
-  Y = np.maximum(Y, 0)
+  Y = (Y / np.sum(Y))*100  
   return Y
-
-
-#########################################################
-#          FROM GEOCHEMISTRY TO MINERALOGY              #
-#########################################################
-
-st.subheader('From geochemistry data to mineralogy estimation')
 
 DATA_FILE_1 = ('nasa_input_2_1.csv')
 DATA_FILE_2 = ('nasa_input_2_2.csv')
@@ -47,6 +38,12 @@ DATA_FILE_2 = ('nasa_input_2_2.csv')
 #@st.cache
 data = pd.read_csv(DATA_FILE_1, sep=";")
 data_2 = pd.read_csv(DATA_FILE_2, sep=";")
+
+#########################################################
+#          FROM GEOCHEMISTRY TO MINERALOGY              #
+#########################################################
+
+st.subheader('From geochemistry data to mineralogy estimation')
 
 if st.checkbox('Show raw data'):
     st.subheader('Raw data')
@@ -157,12 +154,12 @@ with st.form(key="mineralogy_estim_form"):
   st.write('Insert concentration of each chemical:')
   #'SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O'
   col4, col5, col6 = st.columns(3)
-  with col4: SIO2_INPUT = st.number_input('SiO2 (%)',min_value=0, max_value=100,value=50, step=1)
-  with col5: FEO_INPUT = st.number_input('FeO (%)',min_value=0, max_value=100,value=10, step=1)
-  with col6: AL2O3_INPUT = st.number_input('Al2O3 (%)',min_value=0, max_value=100,value=16, step=1)
+  with col4: SIO2_INPUT = st.number_input('SiO2 (%)',min_value=0, max_value=100,value=44, step=1)
+  with col5: FEO_INPUT = st.number_input('FeO (%)',min_value=0, max_value=100,value=22, step=1)
+  with col6: AL2O3_INPUT = st.number_input('Al2O3 (%)',min_value=0, max_value=100,value=8, step=1)
   col7, col8, col9 = st.columns(3)
-  with col7: SO3_INPUT = st.number_input('SO3 (%)',min_value=0, max_value=100,value=5, step=1)
-  with col8: OTHERS_INPUT = st.number_input('Others (%)',min_value=0, max_value=100,value=19, step=1)
+  with col7: SO3_INPUT = st.number_input('SO3 (%)',min_value=0, max_value=100,value=3, step=1)
+  with col8: OTHERS_INPUT = st.number_input('Others (%)',min_value=0, max_value=100,value=23, step=1)
   sum_of_inputs = SIO2_INPUT + FEO_INPUT + AL2O3_INPUT + SO3_INPUT + OTHERS_INPUT
   
   submit_button = st.form_submit_button(label="Estimate mineralogy")
@@ -186,7 +183,7 @@ if sum_of_inputs == 100:
   with col11 :
     st.markdown("**Output : Estimated Mineralogy**") 
     fig, ax = plt.subplots()
-    ax.pie(Y, labels = ['Mafic', 'Sulfate', 'Magnetite', 'Hematite', 'Quartz','Plagioclase','Clay','Amorhous'] ,
+    ax.pie(Y, labels = ['Amorphous','Pyroxene','Sulfate','Magnetite','Hematite','Feldspar','Plagioclase','Clay'] ,
           autopct=lambda p: '{:.0f}%'.format(p),
           startangle = 90)
     st.pyplot(fig)
@@ -202,24 +199,37 @@ SPECIFIC_MEASUREMENT = st.selectbox(
     "Choose a measurement:", 
     list(['RN','JK','CB','WJ','CH','MJ','TP','BK','BS','GB','GH','LB','OK',
 'OU','MB','QL','SB','OB','DU','ST','HF','RH','AL','KM',
-'GE','GE2','HU','EB','GG','MA','MA3','GR','NT','BD','PT','MG','ZS']),0)
+'GE','GE2','HU','EB','GG','MA','MA3','GR','NT','BD','PT','MG','ZS']),1)
 
-#st.dataframe(data_2)
-#st.write(data_2.where(data_2['Abreviation']=='JK', inplace = True)) ##la close where ne fonctionne pas!!!!
+record = np.array(data_2[data_2.Abreviation==SPECIFIC_MEASUREMENT]).flatten()
+record_X = np.array([record[3],record[4],record[5],record[6],record[7],record[8],record[9]])
+record_Y_measure = np.array([record[10],record[11],record[12],record[13],record[14],record[15],record[16],record[17]])
+record_Y_estim = estim_mineral_func (record_X[:4])
+
 col15, col16, col17 = st.columns(3)
 with col15 :
     st.markdown("**Measured Geochemistry**")
-    #fig, ax = plt.subplots()
-    #ax.pie(np.append(input_vector,OTHERS_INPUT), labels = ['SiO2', 'FeO', 'Al2O3', 'SO3','Others'] ,
-    #      autopct=lambda p: '{:.0f}%'.format(p),
-    #      startangle = 90)
-    #st.pyplot(fig) 
+    fig, ax = plt.subplots()
+    plt.pie(record_X, labels = ['SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O'] ,
+        autopct=lambda p: '{:.0f}%'.format(p),
+        startangle = 90)
+    st.pyplot(fig)
 with col16 :
     st.markdown("**Measured Mineralogy**")
+    fig, ax = plt.subplots()
+    plt.pie(record_Y_measure, labels = ['Amorphous','Pyroxene','Sulfate','Magnetite','Hematite','Feldspar','Plagioclase','Clay'] ,
+        autopct=lambda p: '{:.0f}%'.format(p),
+        startangle = 90)
+    st.pyplot(fig)
 with col17 :
-    st.markdown("**Estimated Geochemistry**")    
+    fig, ax = plt.subplots()
+    st.markdown("**Estimated Mineralogy**")   
+    plt.pie(record_Y_estim, labels = ['Amorphous','Pyroxene','Sulfate','Magnetite','Hematite','Feldspar','Plagioclase','Clay'] ,
+        autopct=lambda p: '{:.0f}%'.format(p),
+        startangle = 90) 
+    st.pyplot(fig)
 
-
+st.write ('Note: Here, the estimation function of mineralogy does not include the measurements noise reduction')
 
 
 #########################################################
