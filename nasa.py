@@ -44,7 +44,7 @@ data_2 = pd.read_csv(DATA_FILE_2, sep=";")
 #          FROM GEOCHEMISTRY TO MINERALOGY              #
 #########################################################
 
-st.subheader('From geochemistry data to mineralogy estimation')
+st.subheader('From Geochemistry Data to Mineralogy Estimation')
 
 if st.checkbox('Show raw data'):
     st.subheader('Raw data')
@@ -120,7 +120,7 @@ if LIST_OF_MINERALS:
 #                      XYZ ANALYSIS                     #
 #########################################################
 
-st.subheader('Geochemistry and mineralogy xyz analysis')
+st.subheader('Geochemistry and Mineralogy XYZ Analysis')
 
 col1, col2, col3 = st.columns(3)
 with col1 : X_OF_XYZ_ANALYSIS = st.selectbox(
@@ -149,7 +149,7 @@ st.pyplot(fig)
 #                 ANALYSIS WITH YOUR DATA               #
 #########################################################
 
-st.subheader('Run analysis with your own data')
+st.subheader('Run Analysis with Your Own Data')
 
 with st.form(key="mineralogy_estim_form"):
   st.write('Insert concentration of each chemical element:')
@@ -202,7 +202,7 @@ if sum_of_inputs <= 100:
 #########################################################
 
 
-st.subheader('Estimation with our method vs Measurements')
+st.subheader('Estimation with Our Method VS Measurements')
 SPECIFIC_MEASUREMENT = st.selectbox(
     "Choose a CheMin sample:", 
     list(['RN','JK','CB','WJ','CH','MJ','TP','BK','BS','GB','GH','LB','OK',
@@ -254,7 +254,7 @@ st.write ('*Note: Here, the estimation function of mineralogy includes major min
 #########################################################
 #                 GEOSPATIAL VISUALIZATION              #
 #########################################################
-st.subheader('Geospatial visualization')
+st.subheader('Geospatial Visualization')
 
 col12, col13, col14 = st.columns(3)
 with col13 : 
