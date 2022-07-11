@@ -152,7 +152,7 @@ st.pyplot(fig)
 st.subheader('Run analysis with your own data')
 
 with st.form(key="mineralogy_estim_form"):
-  st.write('Insert concentration of each chemical:')
+  st.write('Insert concentration of each chemical element:')
   #'SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O'
   col4, col5, col6, col7 = st.columns(4)
   with col4: SIO2_INPUT = st.number_input('SiO2 (%)',min_value=0, max_value=100,value=44, step=1)
@@ -204,7 +204,7 @@ if sum_of_inputs <= 100:
 
 st.subheader('Estimation with our method vs Measurements')
 SPECIFIC_MEASUREMENT = st.selectbox(
-    "Choose a measurement:", 
+    "Choose a CheMin sample:", 
     list(['RN','JK','CB','WJ','CH','MJ','TP','BK','BS','GB','GH','LB','OK',
 'OU','MB','QL','SB','OB','DU','ST','HF','RH','AL','KM',
 'GE','GE2','HU','EB','GG','MA','MA3','GR','NT','BD','PT','MG','ZS']),1)
@@ -248,7 +248,7 @@ with col17 :
     fig.gca().add_artist(centre_circle)    
     st.pyplot(fig)
 
-st.write ('*Note: Here, the estimation function of mineralogy does not include the measurements noise reduction')
+st.write ('*Note: Here, the estimation function of mineralogy includes major minerals only')
 
 
 #########################################################
