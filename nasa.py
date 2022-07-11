@@ -248,7 +248,7 @@ with col17 :
     fig.gca().add_artist(centre_circle)    
     st.pyplot(fig)
 
-st.write ('*Note: Here, the estimation function of mineralogy includes major minerals only')
+st.write ('*Note: Here, the estimation function of mineralogy includes major minerals only.')
 
 
 #########################################################
