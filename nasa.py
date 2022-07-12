@@ -35,9 +35,13 @@ def estim_mineral_func (X) :
 DATA_FILE_1 = ('nasa_input_2_1.csv')
 DATA_FILE_2 = ('nasa_input_2_2.csv')
 
-#@st.cache
-data = pd.read_csv(DATA_FILE_1, sep=";")
-data_2 = pd.read_csv(DATA_FILE_2, sep=";")
+@st.cache
+def load_data(file_name):
+  return pd.read_csv(file_name, sep=";")
+
+
+data = load_data(DATA_FILE_1)
+data_2 = load_data(DATA_FILE_2)
 
 
 #########################################################
@@ -167,8 +171,8 @@ with st.form(key="mineralogy_estim_form"):
 input_vector = [SIO2_INPUT,FEO_INPUT,AL2O3_INPUT,SO3_INPUT]
 
 if sum_of_inputs > 100:
-    st.error("Total of inputs should be equal to 100%. Please change inputs.")
-    st.write("Total of inputs is equal to",sum_of_inputs)
+  error_message = "Total of inputs should be less than 100%. The total of your inputs is equal to "+str(sum_of_inputs)+"%." 
+  st.error(error_message)
 
 if sum_of_inputs <= 100:
   Y = estim_mineral_func(input_vector)
