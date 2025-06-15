@@ -159,46 +159,70 @@ with st.form(key="mineralogy_estim_form"):
   st.write('Insert concentration of each chemical element:')
   #'SiO2', 'FeO', 'Al2O3', 'SO3', 'CaO', 'MgO','Na2O'
   col4, col5, col6, col7 = st.columns(4)
-  with col4: SIO2_INPUT = st.number_input('SiO2 (%)',min_value=0, max_value=100,value=44, step=1)
-  with col5: FEO_INPUT = st.number_input('FeO (%)',min_value=0, max_value=100,value=22, step=1)
-  with col6: AL2O3_INPUT = st.number_input('Al2O3 (%)',min_value=0, max_value=100,value=8, step=1)
-  with col7: SO3_INPUT = st.number_input('SO3 (%)',min_value=0, max_value=100,value=3, step=1)  
+  with col4:
+    SIO2_INPUT = st.number_input('SiO2 (%)', min_value=0, max_value=100, value=44, step=1)
+  with col5:
+    FEO_INPUT = st.number_input('FeO (%)', min_value=0, max_value=100, value=22, step=1)
+  with col6:
+    AL2O3_INPUT = st.number_input('Al2O3 (%)', min_value=0, max_value=100, value=8, step=1)
+  with col7:
+    SO3_INPUT = st.number_input('SO3 (%)', min_value=0, max_value=100, value=3, step=1)
   #col7, col8, col9 = st.columns(3)
   #with col8: OTHERS_INPUT = st.number_input('Others (%)',min_value=0, max_value=100,value=23, step=1)
-  sum_of_inputs = SIO2_INPUT + FEO_INPUT + AL2O3_INPUT + SO3_INPUT #+ OTHERS_INPUT
-  OTHERS_INPUT = 100 - sum_of_inputs 
   submit_button = st.form_submit_button(label="Estimate mineralogy")
-input_vector = [SIO2_INPUT,FEO_INPUT,AL2O3_INPUT,SO3_INPUT]
 
-if sum_of_inputs > 100:
-  error_message = "Total of inputs should be less than 100%. The total of your inputs is equal to "+str(sum_of_inputs)+"%." 
-  st.error(error_message)
+if submit_button:
+  input_vector = [SIO2_INPUT, FEO_INPUT, AL2O3_INPUT, SO3_INPUT]
+  sum_of_inputs = sum(input_vector)
+  OTHERS_INPUT = 100 - sum_of_inputs
 
-if sum_of_inputs <= 100:
-  Y = estim_mineral_func(input_vector)
-  
-  col10, col11= st.columns(2)
-  with col10 :
-    st.markdown("**Input : Geochemistry**")
-    fig, ax = plt.subplots()
-    ax.pie(np.append(input_vector,OTHERS_INPUT), labels = ['SiO2', 'FeO', 'Al2O3', 'SO3','Others'] ,
+  if sum_of_inputs > 100:
+    error_message = (
+        "Total of inputs should be less than 100%. The total of your inputs is equal to "
+        + str(sum_of_inputs)
+        + "%"
+    )
+    st.error(error_message)
+  else:
+    Y = estim_mineral_func(input_vector)
+
+    col10, col11 = st.columns(2)
+    with col10:
+      st.markdown("**Input : Geochemistry**")
+      fig, ax = plt.subplots()
+      ax.pie(
+          np.append(input_vector, OTHERS_INPUT),
+          labels=['SiO2', 'FeO', 'Al2O3', 'SO3', 'Others'],
           autopct=lambda p: '{:.0f}%'.format(p),
-          startangle = 90,
-          colors=['#a5c8e1','#ffcb9e','#aad9aa','#eea8a9','#a5a5a5'])
-    centre_circle = plt.Circle((0,0),0.70,fc='white')
-    fig = plt.gcf()
-    fig.gca().add_artist(centre_circle)
-    st.pyplot(fig) 
-  with col11 :
-    st.markdown("**Output : Estimated Mineralogy**") 
-    fig, ax = plt.subplots()
-    ax.pie(Y, labels = ['Amorphous','Pyroxene','Sulfate','Magnetite','Hematite','Feldspar','Plagioclase','Clay'] ,
+          startangle=90,
+          colors=['#a5c8e1', '#ffcb9e', '#aad9aa', '#eea8a9', '#a5a5a5'],
+      )
+      centre_circle = plt.Circle((0, 0), 0.70, fc='white')
+      fig = plt.gcf()
+      fig.gca().add_artist(centre_circle)
+      st.pyplot(fig)
+    with col11:
+      st.markdown("**Output : Estimated Mineralogy**")
+      fig, ax = plt.subplots()
+      ax.pie(
+          Y,
+          labels=[
+              'Amorphous',
+              'Pyroxene',
+              'Sulfate',
+              'Magnetite',
+              'Hematite',
+              'Feldspar',
+              'Plagioclase',
+              'Clay',
+          ],
           autopct=lambda p: '{:.0f}%'.format(p),
-          startangle = 90)
-    centre_circle = plt.Circle((0,0),0.70,fc='white')
-    fig = plt.gcf()
-    fig.gca().add_artist(centre_circle)    
-    st.pyplot(fig)
+          startangle=90,
+      )
+      centre_circle = plt.Circle((0, 0), 0.70, fc='white')
+      fig = plt.gcf()
+      fig.gca().add_artist(centre_circle)
+      st.pyplot(fig)
 
 
 #########################################################
